@@ -6,4 +6,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### added
-- 
+- Autodetects delivery method in ecommerce according to zip code of customer and better price by volume total or weight total.

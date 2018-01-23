@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-# Copyright 2018 Humanytek - Manuel Marquez <manuel@humanytek.com>
+# Copyright 2018 Humanytek
+# - Manuel Marquez <manuel@humanytek.com>
+# - Ruben Bravo <rubenred18@gmail.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
 {
@@ -10,9 +12,11 @@
     'website': "http://www.humanytek.com",
     'license': 'AGPL-3',
     'depends': [
-
+        'website_sale_delivery',
+        'sale_order_autodetect_delivery_method',
     ],
     'data': [
+        'views/test.xml',
     ],
     'installable': True,
     'auto_install': False
