@@ -3,14 +3,24 @@
   <data>
 
     <template id="payment_delivery_test" name="Test Delivery Costs" inherit_id="website_sale.payment">
-        <xpath expr="//div[@id='delivery_carrier']" position="replace" />
-    </template>
-
-    <template id="payment_delivery" name="Test Delivery Costs" inherit_id="website_sale.payment">
-        <xpath expr="//div[@id='payment_method']" position="before">
-          <input type="text" t-att-value="order.carrier_id" name="test"/>
+        <xpath expr="//ul[@class='list-unstyled']" position="replace" >
+            <label>
+                   <input t-att-value="order.carrier_id.id" type="radio" name="delivery_type" t-att-checked="True"/>
+                       <abbr t-att-title="order.carrier_id.website_description"><span t-field="order.carrier_id.name"/></abbr>
+                       <!--<span class="badge" t-field="order.currier_id.price"
+                                 t-field-options='{
+                                     "widget": "monetary",
+                                     "from_currency": "order.currier_id.product_id.company_id.currency_id",
+                                     "display_currency": "website_sale_order.currency_id"
+                                  }'/>-->
+                      <div t-field="order.carrier_id.website_description" class="text-muted"/>
+            </label>
+            <t t-if="not order.carrier_id">
+                <label>
+                   <h5>No se recomienda ninguna empresa de paquetería</h5>
+                </label>
+            </t>
         </xpath>
     </template>
-
   </data>
 </openerp>
