@@ -45,7 +45,7 @@ class SaleOrder(models.Model):
                     carrier_ids.insert(0, carrier_id)
     #         if force_carrier_id or not carrier_id or not carrier_id in carrier_ids:
             _logger.debug('DEBUG ORDERrrrrrrrrrrrrrrrssss %s', order.order_line)
-    #                       
+    #
             if order.state in ['draft', 'send'] and order.order_line:
                 order.button_dummy()
     #             # for delivery_id in carrier_ids:
@@ -72,7 +72,7 @@ class SaleOrder(models.Model):
         # The carrier might also be invalid, eg: if you bought things that are too heavy
         # -> this may cause a bug if you go to the checkout screen, choose a carrier,
         #    then update your cart (the cart becomes uneditable)
-        #self.write(cr, uid, ids, {'carrier_id': False}, context=context)
+        self.write(cr, uid, ids, {'carrier_id': False}, context=context)
         _logger.debug('jjjjjjjjjjjjjjjjjjjjjjjjjjjj %s', line_id)
         values = super(SaleOrder, self)._cart_update(
             cr, uid, ids, product_id, line_id, add_qty, set_qty, context, **kwargs)
