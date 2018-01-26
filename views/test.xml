@@ -4,7 +4,7 @@
 
     <template id="payment_delivery_test" name="Test Delivery Costs" inherit_id="website_sale.payment">
         <xpath expr="//ul[@class='list-unstyled']" position="replace" >
-            <label>
+            <label t-if="order.carrier_id">
                    <input t-att-value="order.carrier_id.id" type="radio" name="delivery_type" t-att-checked="True"/>
                        <abbr t-att-title="order.carrier_id.website_description"><span t-field="order.carrier_id.name"/></abbr>
                        <!--<span class="badge" t-field="order.currier_id.price"
@@ -12,15 +12,44 @@
                                      "widget": "monetary",
                                      "from_currency": "order.currier_id.product_id.company_id.currency_id",
                                      "display_currency": "website_sale_order.currency_id"
-                                  }'/>-->
+                                  }'/>
+                                  -->
                       <div t-field="order.carrier_id.website_description" class="text-muted"/>
             </label>
             <t t-if="not order.carrier_id">
                 <label>
-                   <h5>No se recomienda ninguna empresa de paquetería</h5>
+                    <h5>Ninguna opción de envío llega a tu destino. Por favor
+                    selecciona otro Código Postal de entrega o comunicate con
+                    nosotros para ayudarte</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/page/website.contactus">Contáctanos</a></li>
+                    </ul>
                 </label>
             </t>
         </xpath>
+        <xpath expr="//t[@id='acquirers_list']" position="replace" >
+
+                  <t t-foreach="acquirers or []" t-as="acquirer" id="acquirers_list">
+                      <div t-att-data-id="acquirer.id" class="oe_sale_acquirer_button hidden pull-right" t-if="order.carrier_id">
+                        <div t-raw="acquirer.button"/>
+                        <div t-field="acquirer.pre_msg"/>
+                      </div>
+                      <!--<div t-att-data-id="acquirer.id" class="oe_sale_acquirer_button hidden pull-right disabled" disabled="disabled" t-if="not order.carrier_id">
+                        <div t-raw="acquirer.button" disabled="disabled" class="disabled"/>
+                        <div t-field="acquirer.pre_msg"/>
+                      </div>-->
+                  </t>
+
+        </xpath>
+
     </template>
+
+    <!--<template id="payment_disabled" inherit_id="website_sale.payment">
+        <xpath expr="//form[@action='/shop/payment/validate']" position="replace"/>
+            <span t-if="order.amount_total > 0 and order.carrier_id">Pay Now sdf<span class="fa fa-long-arrow-right"></span></span>
+            <span t-if="order.amount_total > 0 and not order.carrier_id" class="disabled">No Pay Now <span class="fa fa-long-arrow-right disabled"></span></span>
+        </xpath>
+    </template>-->
+
   </data>
 </openerp>

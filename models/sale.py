@@ -40,17 +40,8 @@ class SaleOrder(models.Model):
                     carrier_ids.remove(carrier_id)
                     carrier_ids.insert(0, carrier_id)
             if force_carrier_id or not carrier_id:
-    #                       
-#                if order.state in ['draft', 'send'] and order.id:
                 if order.state in ['draft', 'send'] and order.create_date != order.write_date:
                     order.button_dummy()
-    #             # for delivery_id in carrier_ids:
-    #             #     carrier = carrier_obj.verify_carrier(
-    #             #         cr, SUPERUSER_ID, [delivery_id], order.partner_shipping_id)
-    #             #     if carrier:
-    #             #         carrier_id = delivery_id
-    #             #         break
-    #             # order.write({'carrier_id': carrier_id})
             if carrier_id:
                 order.delivery_set()
             else:
