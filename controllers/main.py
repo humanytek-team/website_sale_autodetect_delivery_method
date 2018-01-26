@@ -28,7 +28,7 @@ class website_sale(openerp.addons.website_sale.controllers.main.website_sale):
             _logger.debug('DEBUG ORDER BEFORE %s', order.carrier_id)
             order.button_dummy()
             _logger.debug('DEBUG ORDER AFTER %s', order.carrier_id)
-            #order.write({'carrier_id': order.carrier_id.id})
+            #order.write({'carrier_id': order.button_dummy()})
         else:
             compute_currency = lambda price: price
 
