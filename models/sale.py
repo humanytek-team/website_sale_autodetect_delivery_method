@@ -30,10 +30,6 @@ class SaleOrder(models.Model):
                 cr, SUPERUSER_ID, [order.id], context=context)
             return True
         else:
-            _logger.debug('DEBUG CHECK CARRIERRRRRRRRR %s',
-                          order.carrier_id.id)
-            _logger.debug('AAAAAAAAAAAAAAAAAAAAAAAAAAAA %s',
-                          order.name)
             carrier_id = order.carrier_id.id or force_carrier_id
             carrier_ids = self._get_delivery_methods(
                 cr, uid, order, context=context)
@@ -43,18 +39,9 @@ class SaleOrder(models.Model):
                 else:
                     carrier_ids.remove(carrier_id)
                     carrier_ids.insert(0, carrier_id)
-    #         if force_carrier_id or not carrier_id or not carrier_id in carrier_ids:
-            _logger.debug('DEBUG ORDERrrrrrrrrrrrrrrrssss %s', order.order_line)
-    #
-            if order.state in ['draft', 'send'] and order.order_line:
-                order.button_dummy()
-    #             # for delivery_id in carrier_ids:
-    #             #     carrier = carrier_obj.verify_carrier(
-    #             #         cr, SUPERUSER_ID, [delivery_id], order.partner_shipping_id)
-    #             #     if carrier:
-    #             #         carrier_id = delivery_id
-    #             #         break
-    #             # order.write({'carrier_id': carrier_id})
+            if force_carrier_id or not carrier_id:
+                if order.state in ['draft', 'send'] and order.create_date != order.write_date:
+                    order.button_dummy()
             if carrier_id:
                 order.delivery_set()
             else:
@@ -65,7 +52,6 @@ class SaleOrder(models.Model):
     #@api.v7
     def _cart_update(self, cr, uid, ids, product_id=None, line_id=None, add_qty=0, set_qty=0, context=None, **kwargs):
         """ Override to update carrier quotation if quantity changed """
-        _logger.debug('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk %s', line_id)
         self._delivery_unset(cr, uid, ids, context=context)
 
         # When you update a cart, it is not enouf to remove the "delivery cost" line
@@ -73,13 +59,11 @@ class SaleOrder(models.Model):
         # -> this may cause a bug if you go to the checkout screen, choose a carrier,
         #    then update your cart (the cart becomes uneditable)
         self.write(cr, uid, ids, {'carrier_id': False}, context=context)
-        _logger.debug('jjjjjjjjjjjjjjjjjjjjjjjjjjjj %s', line_id)
         values = super(SaleOrder, self)._cart_update(
             cr, uid, ids, product_id, line_id, add_qty, set_qty, context, **kwargs)
 
         if add_qty or set_qty is not None:
             for sale_order in self.browse(cr, uid, ids, context=context):
-                _logger.debug('HHHHHHHHHHHHHHHHHHHHHHHHH %s', sale_order.carrier_id.id)
                 self._check_carrier_quotation(
                     cr, uid, sale_order, context=context)
 
